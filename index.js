@@ -6,11 +6,6 @@ const textToSVG = TextToSVG.loadSync("./assets/NotoSansJP-Bold.ttf");
 const WIDTH = 1200;
 const TITLE_AREA = { begin: 30, end: 480 };
 
-/**
- *
- * @param {string[]} title
- * @returns
- */
 const textToSvg = (title) => {
   const options = {
     x: 0,
@@ -26,10 +21,12 @@ const textToSvg = (title) => {
 
 const setPlace = (data) => {
   const n = data.length;
-  const dy = Math.floor((TITLE_AREA.end - TITLE_AREA.begin) / (n + 1));
+  const dy = Math.floor((TITLE_AREA.end - TITLE_AREA.begin) / n);
   return data.map(({ svg, metrics }, i) => {
     const x = Math.floor(WIDTH / 2 - metrics.width / 2);
-    const y = TITLE_AREA.begin + dy * (i + 1) - Math.floor(metrics.height / 2);
+    const y = Math.floor(
+      TITLE_AREA.begin + dy / 2 + dy * i - metrics.height / 2
+    );
     return { svg, x, y };
   });
 };
@@ -47,5 +44,3 @@ const generateOgp = async (texts) => {
     )
     .toFile(path.resolve("out/ogp.png"));
 };
-
-generateOgp(["Kanadeのサイトへ", "ようこそ！"]);
